@@ -1,6 +1,6 @@
 import { logger } from "../../utils/logger";
 import { Admin } from "../entities/Admin";
-import { AdminRepository } from "../repositories/AdminRepository";
+import AdminRepository from "../repositories/AdminRepository";
 import bcrypt from "bcryptjs";
 
 /**
@@ -9,11 +9,9 @@ import bcrypt from "bcryptjs";
 
 export const seedData = async () => {
     try {
-        const adminRepository = new AdminRepository();
 
         // Count the number of admins already present.
-        const adminCount = await adminRepository.countAdmins();
-        logger.info(__filename, "seedData", "", `Admin count: ${adminCount}`, { adminCount });
+        const adminCount = await AdminRepository.countAdmins();
 
         if (adminCount === 0) {
             // Seed data for admin if the table is empty.
@@ -27,8 +25,8 @@ export const seedData = async () => {
             admin.password = bcrypt.hashSync(process.env.ADMIN_PASSWORD as string, 10);
 
             // Save the admin to the database.
-            await adminRepository.createAdmin(admin);
-            logger.info(__filename,"seedData", "", "Admin Seed Data has been added successfully.", "")
+            await AdminRepository.createAdmin(admin);
+            logger.info(__filename, "seedData", "", "Admin Seed Data has been added successfully.", "")
         } else {
             logger.info(__filename, "seedData", "", "Admin table already populated, skipping seed data.", "")
         }

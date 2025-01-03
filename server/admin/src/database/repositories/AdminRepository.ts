@@ -7,7 +7,7 @@ import AppDataSource from "../config/dbConfig";
  * Admin repository class to handle database operations related to Admin.
  */
 
-export class AdminRepository{
+class AdminRepository{
     private repository: Repository<Admin>;
 
     constructor() {
@@ -47,3 +47,5 @@ export class AdminRepository{
     }
 
 }
+
+export default new AdminRepository()

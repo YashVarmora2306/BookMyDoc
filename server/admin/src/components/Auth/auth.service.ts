@@ -2,16 +2,10 @@ import { logger } from "../../utils/logger";
 import jwt from "jsonwebtoken";
 import bcrypt from "bcryptjs";
 import { ERROR_MESSAGE } from "../../constant/message";
-import { IAdmin, ILoginData } from "./interface/admin.interface";
-import { AdminRepository } from "../../database/repositories/AdminRepository";
+import { IAdmin, ILoginData } from "./interface/auth.interface";
+import AdminRepository from "../../database/repositories/AdminRepository";
 
 class AuthService {
-    private adminRepository: AdminRepository;
-
-    constructor() {
-        // Create an instance of the AdminRepository class.
-        this.adminRepository = new AdminRepository();
-    }
 
     /**
      * Compare the password.
@@ -20,7 +14,7 @@ class AuthService {
      * @returns 
      */
 
-    async comparePassword(password: string, hashedPassword: string){
+    async comparePassword(password: string, hashedPassword: string) {
         try {
             const isMatch = await bcrypt.compare(password, hashedPassword);
             return isMatch;
@@ -54,10 +48,10 @@ class AuthService {
      * @returns 
      */
 
-    async getAdminByEmail(loginPayload: ILoginData): Promise<IAdmin | null>{
+    async getAdminByEmail(loginPayload: ILoginData): Promise<IAdmin | null> {
         try {
             const email = loginPayload.email;
-            const admin = await this.adminRepository.findAdminByEmail(email);
+            const admin = await AdminRepository.findAdminByEmail(email);
             return admin || null;
         } catch (error) {
             logger.error(__filename, "getAdminByEmail", "", "Error occurred while getting admin by email", { error });

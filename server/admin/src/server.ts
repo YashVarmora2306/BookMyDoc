@@ -6,7 +6,7 @@ import initializeDatabase from "./database/initialization/dbInitialization";
 
 dotenv.config({ path: `${__dirname}/../.env` });
 
-const PORT: number = Number(process.env.PORT) || 5000;
+const PORT: number = Number(process.env.PORT) || 5001;
 
 (async () => {
     try {

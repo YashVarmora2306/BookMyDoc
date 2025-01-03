@@ -1,5 +1,5 @@
 import { Request, Response } from "express";
-import { ILoginData, LoginResponse } from "./interface/admin.interface";
+import { ILoginData, LoginResponse } from "./interface/auth.interface";
 import { logger } from "../../utils/logger";
 import authService from "./auth.service";
 import { ResponseHandler } from "../../utils/helper";
@@ -17,7 +17,7 @@ class AuthController {
 
     async login(req: Request, res: Response): Promise<LoginResponse | any> {
         try {
-            logger.info(__filename, req.method, "", "Incoming request", { url: req.originalUrl, body: req.body });
+            logger.info(__filename, req.method, "", `Incoming request from ${req.originalUrl}`, "");
 
             const loginPayload: ILoginData = req.body;
 

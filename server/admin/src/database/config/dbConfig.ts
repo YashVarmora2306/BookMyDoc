@@ -5,9 +5,18 @@ dotenv.config();
 
 const AppDataSource = new DataSource({
     type: 'postgres',
+
+    // using url
     url: process.env.DB_URL as string,
-    synchronize: false,
-    logging: true,
+
+    /** using connection options
+    host: "localhost",
+    port: port,
+    username: "postgres",
+    password: "password",
+    database: "database", */
+    synchronize: true,
+    logging: false,
     entities: [
         `${__dirname}/../entities/*.ts`
     ],
