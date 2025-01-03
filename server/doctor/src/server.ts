@@ -8,7 +8,7 @@ import { RABBITMQ_QUEUE_NAME } from "./constant/message";
 
 dotenv.config({ path: `${__dirname}/../.env` });
 
-const PORT: number = Number(process.env.PORT) || 5001;
+const PORT: number = Number(process.env.PORT) || 5002;
 
 (async () => {
     try {
@@ -18,10 +18,9 @@ const PORT: number = Number(process.env.PORT) || 5001;
 
         await initializeDatabase();
         logger.info(__filename, "", "", "Connected to postgres database successfully", "");
+
         await rabbitMQ.connect();
-        await rabbitMQ.consumeMessage(RABBITMQ_QUEUE_NAME.ERROR_QUEUE, (errorMessage) => {
-            console.log(errorMessage);
-        });
+        await rabbitMQ.consumeMessages(RABBITMQ_QUEUE_NAME.DOCTOR_QUEUE);
 
     } catch (error) {
         logger.error(__filename, "", "", `Failed to start the server: ${error}`, { error });

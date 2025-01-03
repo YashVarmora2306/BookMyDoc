@@ -1,6 +1,6 @@
 import { Router } from "express";
 import AuthRouter from "./auth.routes";
-
+import DoctorRouter from "./doctor.routes";
 
 export default (app: Router) => {
     const apiRouter: Router = Router();
@@ -14,4 +14,5 @@ export default (app: Router) => {
 
     // Auth routes
     apiRouter.use("/auth", AuthRouter);
+    apiRouter.use("/doctor", DoctorRouter);
 }

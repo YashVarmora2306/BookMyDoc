@@ -46,6 +46,18 @@ class AdminRepository{
         })
     }
 
+    /**
+     * Find an admin by id.
+     * @param id - Id of the admin to find.
+     * @return The admin entity if found, null otherwise.
+     */
+
+    public async findAdminById(id: string): Promise<Admin | null> {
+        return this.repository.findOne({
+            where: { id },
+        });
+        }
+
 }
 
 export default new AdminRepository()
