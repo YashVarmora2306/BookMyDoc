@@ -2,12 +2,14 @@ import amqp, { Channel, Connection } from "amqplib"
 import { logger } from "../logger";
 
 class RabbitMQService {
+
     private connection: Connection | null = null;
     private channel: Channel | null = null;
 
     /**
-   * Connects to RabbitMQ and initializes a channel.
-   */
+     * Connects to RabbitMQ and initializes a channel.
+     * 
+    */
 
     async connect() {
         try {
@@ -21,31 +23,32 @@ class RabbitMQService {
     }
 
     /**
-   * Sends a message to the specified queue.
-   * @param queueName - The name of the queue to send the message to.
-   * @param message - The message to be sent.
-   */
+     * Sends a message to the specified queue.
+     * @param queueName - The name of the queue to send the message to.
+     * @param data - data to be sent.
+     */
 
-    async sendMessage(queueName: string, message: string) {
+    async publishToQueue(queueName: string, data: any) {
         try {
             if (!this.channel) {
                 await this.connect();
             }
             await this.channel!.assertQueue(queueName, { durable: true });
-            await this.channel!.sendToQueue(queueName, Buffer.from(message), { persistent: true });
-            logger.info(__filename, "sendMessage", "", `Message sent to queue ${queueName}.`);
+            await this.channel!.sendToQueue(queueName, Buffer.from(data), { persistent: true });
+            logger.info(__filename, "publishToQueue", "", `Message sent to queue ${queueName}.`);
         } catch (error) {
-            logger.error(__filename, "sendMessage", "", `Error sending message to queue ${queueName}:`, error);
+            logger.error(__filename, "publishToQueue", "", `Error sending message to queue ${queueName}:`, error);
             throw error;
         }
     }
 
     /**
-     * Consumes messages from the specified queue.
-     * @param queueName - The name of the queue to consume messages from.
+     * Subscribes to the specified queue.
+     * @param queueName - The name of the queue to subscribe to.
      * @param callback - The callback function to process the message.
      */
-    async consumeMessage(queueName: string, callback: (message: string) => void) {
+
+    async subscribeToQueue(queueName: string, callback: (message: string) => void) {
         try {
             if (!this.channel) {
                 await this.connect();
@@ -53,36 +56,19 @@ class RabbitMQService {
             await this.channel!.assertQueue(queueName, { durable: true });
             await this.channel!.consume(queueName, (msg) => {
                 if (msg) {
-                    const message =JSON.parse( msg.content.toString());
+                    const message = msg.content.toString();
                     callback(message);
                     this.channel!.ack(msg);
+                } else {
+                    logger.error(__filename, "subscribeToQueue", "", `Error consuming message from queue ${queueName}:`, "No message found");
                 }
-            });
-            logger.info(__filename, "consumeMessage", "", `Consuming messages from queue ${queueName}.`);
+            })
+            logger.info(__filename, "subscribeToQueue", "", `Subscribed to queue ${queueName}.`);
         } catch (error) {
-            logger.error(__filename, "consumeMessage", "", `Error consuming messages from queue ${queueName}:`, error);
+            logger.error(__filename, "subscribeToQueue", "", `Error subscribing to queue ${queueName}:`, error);
             throw error;
         }
     }
-
-    /**
-   * Closes the RabbitMQ connection.
-   */
-
-    async close() {
-            try {
-                if (this.channel) {
-                    await this.channel.close();
-                    logger.info(__filename, "", "", "RabbitMQ channel closed")
-                }
-                if (this.connection) {
-                    await this.connection.close();
-                    logger.info(__filename, "", "", "RabbitMQ connection closed")
-                }
-            } catch (error) {
-                logger.error(__filename, "", "", `Error closing RabbitMQ connection: `, error);
-            }
-        }
 
     }
 

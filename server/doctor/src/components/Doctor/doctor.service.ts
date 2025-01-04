@@ -1,11 +1,10 @@
-import { ERROR_MESSAGE, RABBITMQ_QUEUE_NAME } from "../../constant/message";
+import { ERROR_MESSAGE } from "../../constant/message";
 import { Doctor } from "../../database/entities/Doctor";
 import DoctorRepository from "../../database/repositories/DoctorRepository";
 import { logger } from "../../utils/logger";
 import { IDoctorData } from "./interface/doctor.interface";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import rabbitMQ from "../../utils/rabbitMQ/rabbitMQ";
 
 
 class DoctorService {
@@ -78,16 +77,6 @@ class DoctorService {
             return doctor;
 
         } catch (error) {
-
-
-            const message = JSON.stringify({
-                error: 'Doctor creation failed',
-                details: error,
-                doctorData,
-            })
-
-            // Send the error message to the error queue
-            await rabbitMQ.sendMessage(RABBITMQ_QUEUE_NAME.ERROR_QUEUE, message);
 
             logger.error(__filename, 'createDoctor', '', 'Error occurred', { error });
 

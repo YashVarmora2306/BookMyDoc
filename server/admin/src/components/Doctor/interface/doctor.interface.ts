@@ -1,4 +1,4 @@
-export interface IDoctorData {
+export interface IDoctorPayload {
     firstName: string;
     lastName: string;
     email: string;
@@ -11,3 +11,18 @@ export interface IDoctorData {
     fees: number;
     address: object;
 }
+
+export interface IDoctorData {
+    firstName: string;
+    lastName: string;
+    email: string;
+    password: string;
+    profilePicture: string;
+    specialist: string;
+    degree: string;
+    experience: string;
+    about: string;
+    fees: number;
+    address: object;
+}
+
