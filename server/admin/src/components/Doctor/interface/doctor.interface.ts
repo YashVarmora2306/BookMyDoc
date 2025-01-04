@@ -26,3 +26,8 @@ export interface IDoctorData {
     address: object;
 }
 
+export interface IReplayFromDoctor { 
+    status: string;
+    message: string;
+    data: object;
+}

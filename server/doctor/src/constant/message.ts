@@ -29,6 +29,7 @@ export const VALIDATION_MESSAGE = {
 }
 
 export const RABBITMQ_QUEUE_NAME = {
-    DOCTOR_QUEUE: "doctorQueue",
+    DOCTOR_CREATION_QUEUE: "doctorCreationQueue",
+    DOCTOR_REPLY_QUEUE: "doctorReplyQueue",
     ERROR_QUEUE: "errorQueue"
 }

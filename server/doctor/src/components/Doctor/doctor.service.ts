@@ -48,7 +48,7 @@ class DoctorService {
    * Creates a new doctor in the database.
    * @param doctorData - The doctor data to be saved.
    */
-    async createDoctor(doctorData: IDoctorData) {
+    async createDoctor(doctorData: IDoctorData): Promise<Doctor> {
         try {
 
             // Check if a doctor with the same email already exists
@@ -78,7 +78,7 @@ class DoctorService {
 
         } catch (error) {
 
-            logger.error(__filename, 'createDoctor', '', 'Error occurred', { error });
+            logger.error(__filename, 'createDoctor', '', 'Error occurred', error);
 
             throw error;
         }

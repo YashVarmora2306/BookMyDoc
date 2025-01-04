@@ -2,7 +2,7 @@ import { RABBITMQ_QUEUE_NAME } from "../../constant/message";
 import handleUpload from "../../utils/helper/handleUpload";
 import { logger } from "../../utils/logger";
 import rabbitMQ from "../../utils/rabbitMQ/rabbitMQ";
-import { IDoctorData, IDoctorPayload } from "./interface/doctor.interface";
+import { IDoctorData, IDoctorPayload, IReplayFromDoctor } from "./interface/doctor.interface";
 
 class DoctorService {
 
@@ -18,7 +18,7 @@ class DoctorService {
                     profilePicture: profilePicture
                 }
                 const message = JSON.stringify(doctorData);
-                await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.DOCTOR_QUEUE, message);
+                await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.DOCTOR_CREATION_QUEUE, message);
                 logger.info(__filename, "createDoctor", "", `Doctor creation requested successfully.`)
                 return doctorData;
 
@@ -26,7 +26,25 @@ class DoctorService {
                 logger.error(__filename, "createDoctor", "", "Error while creating doctor request: ", error)
                 throw error
             }
-        }
+    }
+    
+    /**
+     * Handles receiving a reply from the doctor service through RabbitMQ.
+     * @returns - The response from the doctor service.
+     */
+    async getReplyFromDoctor(): Promise<IReplayFromDoctor> {
+        return new Promise((resolve, reject) => {
+            rabbitMQ.subscribeToQueue(RABBITMQ_QUEUE_NAME.DOCTOR_REPLY_QUEUE, async (message: string) => {
+                try {
+                    const messageData = JSON.parse(message);
+                    logger.info(__filename, "getReplyFromDoctor", "", "Reply from Doctor service: ", messageData);
+                    resolve(messageData);
+                } catch (error) {
+                    reject(error);
+                }
+            });
+        });
+    }
 }
 
 export default new DoctorService();
