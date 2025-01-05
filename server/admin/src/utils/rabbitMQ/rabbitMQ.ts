@@ -1,4 +1,4 @@
-import amqp, { Channel, Connection } from "amqplib"
+import amqp, { Channel, Connection, ConsumeMessage } from "amqplib"
 import { logger } from "../logger";
 
 class RabbitMQService {
@@ -54,7 +54,7 @@ class RabbitMQService {
                 await this.connect();
             }
             await this.channel!.assertQueue(queueName, { durable: true });
-            await this.channel!.consume(queueName,(msg) => {
+            const consumerTag = await this.channel!.consume(queueName, (msg: ConsumeMessage | null) => {
                 if (msg) {
                     const message = msg.content.toString();
                     callback(message);
@@ -64,12 +64,25 @@ class RabbitMQService {
                 }
             })
             logger.info(__filename, "subscribeToQueue", "", `Subscribed to queue ${queueName}.`);
+            return consumerTag.consumerTag;
         } catch (error) {
             logger.error(__filename, "subscribeToQueue", "", `Error subscribing to queue ${queueName}:`, error);
             throw error;
         }
     }
 
+    async unsubscribeFromQueue(consumerTag: string) {
+        try {
+            if (this.channel) {
+                await this.channel.cancel(consumerTag);
+                logger.info(__filename, "unsubscribeFromQueue", "", `Unsubscribed from queue with consumer tag ${consumerTag}.`);
+            }
+        } catch (error) {
+            logger.error(__filename, "unsubscribeFromQueue", "", `Error unsubscribing from queue with consumer tag ${consumerTag}:`, error);
+            throw error;
+        }
     }
+
+}
 
 export default new RabbitMQService()

@@ -33,12 +33,14 @@ class DoctorService {
      * @returns - The response from the doctor service.
      */
     async getReplyFromDoctor(): Promise<IReplayFromDoctor> {
-        return new Promise((resolve, reject) => {
-            rabbitMQ.subscribeToQueue(RABBITMQ_QUEUE_NAME.DOCTOR_REPLY_QUEUE, async (message: string) => {
+        return new Promise(async(resolve, reject) => {
+            const consumerTag = await rabbitMQ.subscribeToQueue(RABBITMQ_QUEUE_NAME.DOCTOR_REPLY_QUEUE, async (message: string) => {
                 try {
                     const messageData = JSON.parse(message);
-                    logger.info(__filename, "getReplyFromDoctor", "", "Reply from Doctor service: ", messageData);
                     resolve(messageData);
+                    logger.info(__filename, "getReplyFromDoctor", "", "Reply from Doctor service: ", messageData);
+
+                    await rabbitMQ.unsubscribeFromQueue(consumerTag);
                 } catch (error) {
                     logger.error(__filename, "getReplyFromDoctor", "", "Error while receiving reply from Doctor")
                     reject(error);

@@ -1,7 +1,5 @@
 import amqp, { Connection, Channel } from 'amqplib';
 import { logger } from '../logger';
-import doctorController from '../../components/Doctor/doctor.controller';
-
 class RabbitMQService {
 
     private connection: Connection | null = null;
