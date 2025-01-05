@@ -19,6 +19,7 @@ export const ERROR_MESSAGE = {
 export const SUCCESS_MESSAGE = {
     LOGIN_SUCCESS: "Successfully logged in",
     DOCTOR_CREATED: "Doctor created successfully.",
+    DOCTORS_FOUND: "Doctors Found successfully"
 
 }
 
@@ -43,6 +44,7 @@ export const VALIDATION_MESSAGE = {
 
 export const RABBITMQ_QUEUE_NAME = {
     DOCTOR_CREATION_QUEUE: "doctorCreationQueue",
-DOCTOR_REPLY_QUEUE: "doctorReplyQueue",
-    ERROR_QUEUE: "errorQueue"
+    DOCTOR_REPLY_QUEUE: "doctorReplyQueue",
+    ERROR_QUEUE: "errorQueue",
+    GET_DOCTORS_QUEUE: "getDoctorsQueue"
 }

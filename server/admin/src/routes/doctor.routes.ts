@@ -8,7 +8,9 @@ import doctorController from "../components/Doctor/doctor.controller";
 
 const router: Router = Router();
 
-router.post("/create-doctor", authMiddleware, upload.single("profilePicture"),multerErrorHandler, createDoctorValidation, validateMiddleware, doctorController.createDoctor)
+router.post("/create-doctor", authMiddleware, upload.single("profilePicture"), multerErrorHandler, createDoctorValidation, validateMiddleware, doctorController.createDoctor)
+
+router.get("/all-doctors", authMiddleware,doctorController.getAllDoctor)
 
 export default router
 

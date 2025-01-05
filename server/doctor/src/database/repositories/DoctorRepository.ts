@@ -46,6 +46,10 @@ class DoctorRepository {
         })
     }
 
+    public async getAllDoctors(): Promise<Doctor[] | null>{
+        return this.repository.find();
+    }
+
 }
 
 export default new DoctorRepository();

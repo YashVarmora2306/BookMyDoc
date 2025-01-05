@@ -54,7 +54,7 @@ class RabbitMQService {
                 await this.connect();
             }
             await this.channel!.assertQueue(queueName, { durable: true });
-            await this.channel!.consume(queueName, (msg) => {
+            await this.channel!.consume(queueName,(msg) => {
                 if (msg) {
                     const message = msg.content.toString();
                     callback(message);

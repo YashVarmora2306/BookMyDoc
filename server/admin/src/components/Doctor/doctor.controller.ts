@@ -60,6 +60,24 @@ class DoctorController {
         }
     }
 
+    /**
+     * Handle the request to get all doctors.
+     * @param req 
+     * @param res 
+     * @returns 
+     */
+
+    async getAllDoctor(req: Request, res: Response): Promise<IApiResponse | any> {
+        try {
+            const replyFromDoctor = await doctorService.getAllDoctor();
+            if (replyFromDoctor.status === "error") {
+                return ResponseHandler.error(res, 500, replyFromDoctor.message, replyFromDoctor)
+            }
+            return ResponseHandler.success(res, 200, SUCCESS_MESSAGE.DOCTORS_FOUND, replyFromDoctor)
+        } catch (error) {
+            return ResponseHandler.error(res, 500, GLOBAL_MESSAGE.INTERNAL_SERVER_ERROR, error)
+        }
+    }
 
 }
 

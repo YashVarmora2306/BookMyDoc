@@ -29,5 +29,5 @@ export interface IDoctorData {
 export interface IReplayFromDoctor { 
     status: string;
     message: string;
-    data: object;
+    data: string;
 }

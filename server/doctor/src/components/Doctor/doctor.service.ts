@@ -83,6 +83,16 @@ class DoctorService {
             throw error;
         }
     }
+
+    async getAllDoctors() {
+        try {
+            const doctors = await DoctorRepository.getAllDoctors();
+            return doctors;
+        } catch (error) {
+            logger.error(__filename, 'getAllDoctors', '', 'Error occurred', error);
+            throw error;
+        }
+    }
 }
 
 export default new DoctorService()
