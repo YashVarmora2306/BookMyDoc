@@ -4,7 +4,7 @@ import { logger } from "../../utils/logger";
 import rabbitMQ from "../../utils/rabbitMQ/rabbitMQ";
 import { IDoctorData, IDoctorPayload, IReplayFromDoctor } from "./interface/doctor.interface";
 
-class DoctorService {
+class AdminService {
 
     /**
    * Creates a new doctor by sending a message to the doctor Service.
@@ -33,7 +33,7 @@ class DoctorService {
      * @returns - The response from the doctor service.
      */
     async getReplyFromDoctor(): Promise<IReplayFromDoctor> {
-        return new Promise(async(resolve, reject) => {
+        return new Promise(async (resolve, reject) => {
             const consumerTag = await rabbitMQ.subscribeToQueue(RABBITMQ_QUEUE_NAME.DOCTOR_REPLY_QUEUE, async (message: string) => {
                 try {
                     const messageData = JSON.parse(message);
@@ -71,8 +71,25 @@ class DoctorService {
             logger.error(__filename, "getAllDoctor", "", "Error while getting all doctors: ", error)
             throw error
         }
-        
+
+    }
+
+    async changeAvailability(doctorId: string): Promise<IReplayFromDoctor> {
+        try {
+            await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.CHANGE_AVAILABILITY_QUEUE, doctorId)
+            logger.info(__filename, "changeAvailability", "", `Requested to change availability of Doctor with ID: ${doctorId}`)
+            const reply = await this.getReplyFromDoctor()
+            const doctor = {
+                status: reply.status,
+                message: reply.message,
+                data: JSON.parse(reply.data)
+            }
+            return doctor
+        } catch (error) {
+            logger.error(__filename, "changeAvailability", "", "Error while changing availability of Doctor with ID: ", error)
+            throw error
+        }
     }
 }
 
-export default new DoctorService();
+export default new AdminService();

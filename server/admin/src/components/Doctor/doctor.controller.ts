@@ -8,7 +8,7 @@ import rabbitMQ from "../../utils/rabbitMQ/rabbitMQ";
 import { logger } from "../../utils/logger";
 
 
-class DoctorController {
+class AdminController {
 
     /**
   * Handles the request to create a new Doctor.
@@ -79,6 +79,18 @@ class DoctorController {
         }
     }
 
+    async changeAvailability(req: Request, res: Response): Promise<IApiResponse | any> {
+        try {
+            const { doctorId } = req.body
+            const replyFromDoctor = await doctorService.changeAvailability(doctorId)
+            if (replyFromDoctor.status === "error") {
+                return ResponseHandler.error(res, 500, replyFromDoctor.message, replyFromDoctor)
+            }
+            return ResponseHandler.success(res, 200, SUCCESS_MESSAGE.AVAILABILITY_CHANGED, replyFromDoctor)
+        } catch (error) {
+            return ResponseHandler.error(res, 500, GLOBAL_MESSAGE.INTERNAL_SERVER_ERROR, error)
+        }
+    }
 }
 
-export default new DoctorController()
+export default new AdminController()

@@ -1,11 +1,10 @@
 import { logger } from "../../utils/logger";
 import { IDoctorData, IDoctorPayload } from "./interface/doctor.interface";
-import doctorService from "./doctor.service";
+import doctorService from "./service.service";
 import { GLOBAL_MESSAGE, RABBITMQ_QUEUE_NAME, SUCCESS_MESSAGE } from "../../constant/message";
 import rabbitMQ from "../../utils/rabbitMQ/rabbitMQ";
 
-
-class DoctorController {
+class AdminController {
     /**
    * Handles user registration.
    * @param doctorPayload - The doctor data to be registered.
@@ -100,6 +99,36 @@ class DoctorController {
         }
 
     }
+
+    async changeAvailability() {
+        try {
+            await rabbitMQ.subscribeToQueue(RABBITMQ_QUEUE_NAME.CHANGE_AVAILABILITY_QUEUE,
+                async (message: string) => {
+                    const doctor = await doctorService.changeAvailability(message);
+                    const reply = JSON.stringify(
+                        {
+                            status: "success",
+                            message: SUCCESS_MESSAGE.AVAILABILITY_CHANGED,
+                            data: JSON.stringify(doctor)
+                        }
+                    );
+                    await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.DOCTOR_REPLY_QUEUE, reply);
+                    logger.info(__filename, "SubscribeToChangeAvailability", "", "Change availability request processed");
+                }
+            );
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            const reply = JSON.stringify(
+                {
+                    status: "error",
+                    message: errorMessage,
+                    data: null
+                }
+            );
+            await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.DOCTOR_REPLY_QUEUE, reply);
+            logger.error(__filename, "SubscribeToChangeAvailability", "", "Error processing change availability")
+        }
+    }
 }
 
-export default new DoctorController()
+export default new AdminController()

@@ -3,7 +3,6 @@ import "reflect-metadata";
 import app from "./app";
 import { logger } from "./utils/logger";
 import initializeDatabase from "./database/initialization/dbInitialization";
-import rabbitMQ from "./utils/rabbitMQ/rabbitMQ"
 
 dotenv.config({ path: `${__dirname}/../.env` });
 
@@ -17,11 +16,6 @@ const PORT: number = Number(process.env.PORT) || 5001;
 
         await initializeDatabase();
         logger.info(__filename, "", "", "Connected to postgres database successfully", "");
-
-        
-        await rabbitMQ.connect();
-        logger.info(__filename, "", "", "Connected to RabbitMQ successfully", "");
-
 
     } catch (error) {
         logger.error(__filename, "", "", `Failed to start the server: ${error}`, { error });

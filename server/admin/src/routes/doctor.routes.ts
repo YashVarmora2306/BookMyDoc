@@ -10,7 +10,9 @@ const router: Router = Router();
 
 router.post("/create-doctor", authMiddleware, upload.single("profilePicture"), multerErrorHandler, createDoctorValidation, validateMiddleware, doctorController.createDoctor)
 
-router.get("/all-doctors", authMiddleware,doctorController.getAllDoctor)
+router.get("/all-doctors", authMiddleware, doctorController.getAllDoctor)
+
+router.post("/change-availability", authMiddleware, doctorController.changeAvailability);
 
 export default router
 

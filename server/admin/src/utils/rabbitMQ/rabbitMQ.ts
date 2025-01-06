@@ -35,9 +35,9 @@ class RabbitMQService {
             }
             await this.channel!.assertQueue(queueName, { durable: true });
             await this.channel!.sendToQueue(queueName, Buffer.from(data), { persistent: true });
-            logger.info(__filename, "publishToQueue", "", `Message sent to queue ${queueName}.`);
+            logger.info(__filename, "publishToQueue", "", `Message sent to ${queueName}.`);
         } catch (error) {
-            logger.error(__filename, "publishToQueue", "", `Error sending message to queue ${queueName}:`, error);
+            logger.error(__filename, "publishToQueue", "", `Error sending message to ${queueName}:`, error);
             throw error;
         }
     }
@@ -60,13 +60,13 @@ class RabbitMQService {
                     callback(message);
                     this.channel!.ack(msg);
                 } else {
-                    logger.error(__filename, "subscribeToQueue", "", `Error consuming message from queue ${queueName}:`, "No message found");
+                    logger.error(__filename, "subscribeToQueue", "", `Error consuming message from ${queueName}:`, "No message found");
                 }
             })
-            logger.info(__filename, "subscribeToQueue", "", `Subscribed to queue ${queueName}.`);
+            logger.info(__filename, "subscribeToQueue", "", `Subscribed to ${queueName}.`);
             return consumerTag.consumerTag;
         } catch (error) {
-            logger.error(__filename, "subscribeToQueue", "", `Error subscribing to queue ${queueName}:`, error);
+            logger.error(__filename, "subscribeToQueue", "", `Error subscribing to ${queueName}:`, error);
             throw error;
         }
     }

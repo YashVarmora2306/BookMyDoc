@@ -15,15 +15,6 @@ class DoctorRepository {
     }
 
     /**
-     * Count the number of Doctors in the database.
-     * @returns The number of Doctors in the database.
-     */
-
-    public async countDoctors(): Promise<number> {
-        return this.repository.count();
-    }
-
-    /**
      * Create and save an Doctor to the database.
      * @param Doctor - The Doctor entity to save.
      * @returns The saved Doctor entity.
@@ -46,10 +37,38 @@ class DoctorRepository {
         })
     }
 
+    /**
+     * Get all Doctors
+     * @returns An array of all Doctors.
+     */
+
     public async getAllDoctors(): Promise<Doctor[] | null>{
         return this.repository.find();
     }
 
+    /**
+     * Find an Doctor by id.
+     * @param id - Id of the doctor to find
+     * @returns The Doctor entity if found, null otherwise.
+     */
+
+    public async findDoctorById(id: string): Promise<Doctor | null>{
+        return this.repository.findOneBy({
+            id
+        });
+    }
+
+    /**
+     * Find an Doctor by id and update.
+     * @param id - Id of the doctor to find
+     * @param data - Updated doctor data.
+     * @returns The updated Doctor entity.
+     */
+
+    public async findDoctorByIdAndUpdate(id: string, data: Doctor): Promise<Doctor | null>{
+        await this.repository.update(id, data);
+        return this.repository.findOneBy({id});
+    }
 }
 
 export default new DoctorRepository();

@@ -19,7 +19,8 @@ export const ERROR_MESSAGE = {
 export const SUCCESS_MESSAGE = {
     LOGIN_SUCCESS: "Successfully logged in",
     DOCTOR_ADDED: "Doctor added successfully",
-    SUCCESSFULLY_RETRIEVED_DOCTORS: "Successfully retrieved doctors"
+    SUCCESSFULLY_RETRIEVED_DOCTORS: "Successfully retrieved doctors",
+    AVAILABILITY_CHANGED:"Successfully Availability changed."
 }
 
 export const VALIDATION_MESSAGE = {
@@ -33,5 +34,6 @@ export const RABBITMQ_QUEUE_NAME = {
     DOCTOR_CREATION_QUEUE: "doctorCreationQueue",
     DOCTOR_REPLY_QUEUE: "doctorReplyQueue",
     ERROR_QUEUE: "errorQueue",
-    GET_DOCTORS_QUEUE: "getDoctorsQueue"
+    GET_DOCTORS_QUEUE: "getDoctorsQueue",
+    CHANGE_AVAILABILITY_QUEUE: "changeAvailabilityQueue"
 }

@@ -7,7 +7,7 @@ import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 
 
-class DoctorService {
+class AdminService {
 
     // Hash the password
     async convertPlainTextToHash(password: string) {
@@ -84,6 +84,9 @@ class DoctorService {
         }
     }
 
+    /**
+     * Get all Doctors.
+     */
     async getAllDoctors() {
         try {
             const doctors = await DoctorRepository.getAllDoctors();
@@ -93,6 +96,29 @@ class DoctorService {
             throw error;
         }
     }
+
+    /**
+     * Change availability
+     * @param doctorId - Id of login doctor.
+     */
+
+    async changeAvailability(doctorId: string) {
+        try {
+            const doctor = await DoctorRepository.findDoctorById(doctorId);
+            if (!doctor) {
+                throw new Error('Doctor not found');
+            }
+
+            const updatedDoctor = await DoctorRepository.findDoctorByIdAndUpdate(doctorId, {
+                ...doctor,
+                available: !doctor.available
+            }
+            )
+            return updatedDoctor;
+        } catch (error) {
+
+        }
+    }
 }
 
-export default new DoctorService()
+export default new AdminService()
