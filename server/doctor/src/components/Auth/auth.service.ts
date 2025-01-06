@@ -58,6 +58,43 @@ class AuthService {
             throw error;
         }
     }
+
+    /**
+     * Get doctor by id.
+     * @param doctorId 
+     */
+
+    async getDoctorById(doctorId: string): Promise<IDoctor | null> {
+        try {
+            const doctor = await DoctorRepository.findDoctorById(doctorId);
+            return doctor || null;
+        } catch (error) {
+            logger.error(__filename, "getDoctorById", "", "Error occurred while getting doctor by id", { error });
+            throw error;
+        }
+    }
+
+    /**
+     * Update Doctor Profile
+     * @param doctorId 
+     * @param data 
+     * @returns 
+     */
+
+    async updateDoctorProfile(doctorId: string, fees: number, address: object, available: boolean): Promise<IDoctor | null> {
+        try {
+            const updatedDoctor = await DoctorRepository.findDoctorByIdAndUpdate(doctorId, {
+                fees,
+                address,
+                available
+            });
+            return updatedDoctor || null;
+        } catch (error) {
+            logger.error(__filename, "updateDoctorProfile", "", "Error occurred while updating doctor profile",
+                { error });
+            throw error;
+        }
+    }
 }
 
 export default new AuthService();

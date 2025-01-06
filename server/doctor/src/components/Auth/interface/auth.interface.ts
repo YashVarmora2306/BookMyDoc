@@ -13,8 +13,8 @@ export interface IDoctor{
     fees: number;
     address: object;
     slots_booked: object;
-    createdAt: Date | string;
-    updatedAt: Date | string;
+    createdAt: Date;
+    updatedAt: Date;
 }
 
 export interface ILoginData {

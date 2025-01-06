@@ -5,10 +5,8 @@ import { ResponseHandler } from "../utils/helper";
 import { logger } from "../utils/logger";
 import AdminRepository from '../database/repositories/AdminRepository';
 
-interface CustomRequest extends Request {
+export interface CustomRequest extends Request {
     adminId: string;
-    iat: number;
-    currentAdmin: any;
 }
 
 // verify the token
@@ -22,12 +20,7 @@ function verifyToken(token: string) {
         // Verify the token
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET);
 
-        const adminTokenData = {
-            adminId: decoded.adminId,
-            iat: decoded.iat,
-        };
-
-        return adminTokenData;
+        return decoded;
     } catch (error) {
         return null;
     }
@@ -58,13 +51,12 @@ async function authMiddleware(req: Request, res: Response, next: NextFunction): 
 
         // Check if the Admin exists
         const currentAdmin = await AdminRepository.findAdminById(adminTokenData.adminId)
-
         if (!currentAdmin) {
             return ResponseHandler.error(res, 401, GLOBAL_MESSAGE.UNAUTHORIZED, GLOBAL_MESSAGE.UNAUTHORIZED);
         }
 
         // Attach the admin to the request
-        customReq.currentAdmin = currentAdmin;
+        customReq.body.adminId = currentAdmin.id;
 
         next();
     } catch (error) {

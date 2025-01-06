@@ -42,7 +42,7 @@ class AdminRepository{
     public async findAdminByEmail(email: string): Promise<Admin | null>{
         return this.repository.findOne({
             where: { email },
-            select:["password"]
+            select:["password", "email","id"]
         })
     }
 

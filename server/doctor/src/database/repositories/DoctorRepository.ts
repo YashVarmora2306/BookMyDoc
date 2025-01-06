@@ -33,7 +33,7 @@ class DoctorRepository {
     public async findDoctorByEmail(email: string): Promise<Doctor | null> {
         return this.repository.findOne({
             where: { email },
-            select: ["password"]
+            select: ["password", "email", "id"]
         })
     }
 
@@ -65,7 +65,7 @@ class DoctorRepository {
      * @returns The updated Doctor entity.
      */
 
-    public async findDoctorByIdAndUpdate(id: string, data: Doctor): Promise<Doctor | null>{
+    public async findDoctorByIdAndUpdate(id: string, data: Partial<Doctor>): Promise<Doctor | null>{
         await this.repository.update(id, data);
         return this.repository.findOneBy({id});
     }

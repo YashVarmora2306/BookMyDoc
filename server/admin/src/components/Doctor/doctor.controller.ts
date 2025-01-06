@@ -6,6 +6,8 @@ import { IApiResponse } from "../../utils/helper/interface/responseInterface";
 import { IDoctorPayload, IReplayFromDoctor } from "./interface/doctor.interface";
 import rabbitMQ from "../../utils/rabbitMQ/rabbitMQ";
 import { logger } from "../../utils/logger";
+import { CustomRequest } from "../../middleware/authMiddleware";
+import { error } from "console";
 
 
 class AdminController {
@@ -17,6 +19,8 @@ class AdminController {
   */
     async createDoctor(req: Request, res: Response): Promise<IApiResponse | any> {
         try {
+            const customReq = req as CustomRequest;
+
             const {
                 firstName,
                 lastName,
@@ -29,7 +33,7 @@ class AdminController {
                 fees,
                 address,
             } = req.body;
-            const imageFile = req.file;
+            const imageFile = customReq.file;
 
             if (!imageFile) {
                 return ResponseHandler.error(res, 400, ERROR_MESSAGE.IMAGE_NOT_FOUND, ERROR_MESSAGE.IMAGE_NOT_FOUND)
@@ -69,6 +73,7 @@ class AdminController {
 
     async getAllDoctor(req: Request, res: Response): Promise<IApiResponse | any> {
         try {
+            const customReq = req as CustomRequest
             const replyFromDoctor = await doctorService.getAllDoctor();
             if (replyFromDoctor.status === "error") {
                 return ResponseHandler.error(res, 500, replyFromDoctor.message, replyFromDoctor)
@@ -81,7 +86,9 @@ class AdminController {
 
     async changeAvailability(req: Request, res: Response): Promise<IApiResponse | any> {
         try {
-            const { doctorId } = req.body
+            const customReq = req as CustomRequest
+
+            const { doctorId } = customReq.body
             const replyFromDoctor = await doctorService.changeAvailability(doctorId)
             if (replyFromDoctor.status === "error") {
                 return ResponseHandler.error(res, 500, replyFromDoctor.message, replyFromDoctor)

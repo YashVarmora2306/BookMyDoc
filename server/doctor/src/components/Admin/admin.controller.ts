@@ -100,6 +100,10 @@ class AdminController {
 
     }
 
+    /**
+     * Handle change availability of doctor.
+     */
+
     async changeAvailability() {
         try {
             await rabbitMQ.subscribeToQueue(RABBITMQ_QUEUE_NAME.CHANGE_AVAILABILITY_QUEUE,

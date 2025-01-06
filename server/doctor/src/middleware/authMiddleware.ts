@@ -5,7 +5,7 @@ import { ResponseHandler } from "../utils/helper";
 import { logger } from "../utils/logger";
 import DoctorRepository from '../database/repositories/DoctorRepository';
 
-interface CustomRequest extends Request {
+export interface CustomRequest extends Request {
     doctorId: string;
     iat: number;
     currentDoctor: any;
@@ -22,12 +22,7 @@ function verifyToken(token: string) {
         // Verify the token
         const decoded: any = jwt.verify(token, process.env.JWT_SECRET);
 
-        const doctorTokenData = {
-            doctorId: decoded.doctorId,
-            iat: decoded.iat,
-        };
-
-        return doctorTokenData;
+        return decoded;
     } catch (error) {
         return null;
     }
@@ -64,7 +59,7 @@ async function authMiddleware(req: Request, res: Response, next: NextFunction): 
         }
 
         // Attach the doctor to the request
-        customReq.currentDoctor = currentDoctor;
+        customReq.body.doctorId = currentDoctor.id;
 
         next();
     } catch (error) {

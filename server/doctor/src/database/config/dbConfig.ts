@@ -15,7 +15,7 @@ const AppDataSource = new DataSource({
     username: "postgres",
     password: "password",
     database: "database", */
-    synchronize: false,
+    synchronize: true,
     logging: false,
     entities: [
         `${__dirname}/../entities/*.ts`

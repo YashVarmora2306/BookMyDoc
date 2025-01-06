@@ -13,14 +13,18 @@ export const ERROR_MESSAGE = {
     JWT_SECRET_NOT_SET: "JWT_SECRET is not set in the environment variables",
     DOCTOR_NOT_FOUND: "Doctor not found.",
     INVALID_CREDENTIALS: "Invalid credentials",
-    EXISTING_EMAIL: "Email already exists."
+    EXISTING_EMAIL: "Email already exists.",
+    ID_NOT_FOUND: "Id not found."
 }
 
 export const SUCCESS_MESSAGE = {
     LOGIN_SUCCESS: "Successfully logged in",
     DOCTOR_ADDED: "Doctor added successfully",
     SUCCESSFULLY_RETRIEVED_DOCTORS: "Successfully retrieved doctors",
-    AVAILABILITY_CHANGED:"Successfully Availability changed."
+    AVAILABILITY_CHANGED: "Successfully Availability changed.",
+    DOCTOR_PROFILE: "Successfully get profile.",
+    DOCTOR_PROFILE_UPDATED:"Profiel Updated successfully",
+    
 }
 
 export const VALIDATION_MESSAGE = {
