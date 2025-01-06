@@ -24,7 +24,7 @@ export const SUCCESS_MESSAGE = {
 }
 
 export const VALIDATION_MESSAGE = {
-    Doctor: {
+    DOCTOR: {
         EMAIL_REQUIRED: "Email is required",
         PASSWORD_REQUIRED: "Password is required",
     }

@@ -1,10 +1,9 @@
 import express, { Application, Request, Response } from "express";
 import middleware from "./middleware";
-// import routes from "./routes";
+import routes from "./routes";
 import { logger } from "./utils/logger";
 import { ResponseHandler } from "./utils/helper";
 import { GLOBAL_MESSAGE } from "./constant/message";
-import rabbitMQ from "./utils/rabbitMQ/rabbitMQ";
 
 
 const app: Application = express();
@@ -14,7 +13,7 @@ app.use(express.urlencoded({ extended: true }))
 
 middleware(app);
 
-// routes(app);
+routes(app);
 
 app.all("/*", (req: Request, res: Response): any => {
     logger.error(__filename, "Invalid Route Handler", "", "Invalid Route Fired: " + req.path, {});

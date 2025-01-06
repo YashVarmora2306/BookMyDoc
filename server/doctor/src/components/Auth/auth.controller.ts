@@ -9,7 +9,7 @@ import { ERROR_MESSAGE, GLOBAL_MESSAGE, SUCCESS_MESSAGE } from "../../constant/m
 class AuthController {
 
     /**
-     * This function is used to login the admin.
+     * This function is used to login the doctor.
      * @param req 
      * @param res 
      * @returns 
@@ -21,23 +21,23 @@ class AuthController {
 
             const loginPayload: ILoginData = req.body;
 
-            // Get admin by email.
-            const admin = await authService.getAdminByEmail(loginPayload);
+            // Get doctor by email.
+            const doctor = await authService.getDoctorByEmail(loginPayload);
 
-            if (!admin) {
+            if (!doctor) {
                 return ResponseHandler.error(res, 400, ERROR_MESSAGE.INVALID_CREDENTIALS, ERROR_MESSAGE.INVALID_CREDENTIALS);
             }
 
             // Compare the password.
-            const isMatch = await authService.comparePassword(loginPayload.password, admin.password);
+            const isMatch = await authService.comparePassword(loginPayload.password, doctor.password);
 
             if (!isMatch) {
                 return ResponseHandler.error(res, 400, ERROR_MESSAGE.INVALID_CREDENTIALS, ERROR_MESSAGE.INVALID_CREDENTIALS);
             }
 
             // send Token
-            const adminId: string = admin.id
-            const token = await authService.generateToken(adminId)
+            const doctorId: string = doctor.id
+            const token = await authService.generateToken(doctorId)
 
             return ResponseHandler.success(res, 200, SUCCESS_MESSAGE.LOGIN_SUCCESS, {token});
         } catch (error) {
