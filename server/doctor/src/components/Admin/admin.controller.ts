@@ -1,6 +1,6 @@
 import { logger } from "../../utils/logger";
 import { IDoctorData, IDoctorPayload } from "./interface/doctor.interface";
-import doctorService from "./service.service";
+import doctorService from "./admin.service";
 import { GLOBAL_MESSAGE, RABBITMQ_QUEUE_NAME, SUCCESS_MESSAGE } from "../../constant/message";
 import rabbitMQ from "../../utils/rabbitMQ/rabbitMQ";
 
