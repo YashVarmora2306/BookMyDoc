@@ -11,33 +11,27 @@ export const GLOBAL_MESSAGE = {
 
 export const ERROR_MESSAGE = {
     JWT_SECRET_NOT_SET: "JWT_SECRET is not set in the environment variables",
-    DOCTOR_NOT_FOUND: "Doctor not found.",
+    APPOINTMENT_NOT_FOUND: "Appointment not found.",
     INVALID_CREDENTIALS: "Invalid credentials",
-    EXISTING_EMAIL: "Email already exists.",
-    ID_NOT_FOUND: "Id not found."
+    IMAGE_NOT_FOUND: "Image not found."
 }
 
 export const SUCCESS_MESSAGE = {
     LOGIN_SUCCESS: "Successfully logged in",
-    DOCTOR_ADDED: "Doctor added successfully",
-    SUCCESSFULLY_RETRIEVED_DOCTORS: "Successfully retrieved doctors",
-    AVAILABILITY_CHANGED: "Successfully Availability changed.",
-    DOCTOR_PROFILE: "Successfully get profile.",
-    DOCTOR_PROFILE_UPDATED:"Profile Updated successfully",
-    
+    APPOINTMENT_CREATED: "Appointment created successfully.",
+    APPOINTMENT_FOUND: "Appointment Found successfully",
+    SUCCESSFULLY_RETRIEVED_APPOINTMENTS: "Successfully retrieved appointments"
 }
 
 export const VALIDATION_MESSAGE = {
-    DOCTOR: {
-        EMAIL_REQUIRED: "Email is required",
-        PASSWORD_REQUIRED: "Password is required",
-    }
+    
 }
 
 export const RABBITMQ_QUEUE_NAME = {
     DOCTOR_CREATION_QUEUE: "doctorCreationQueue",
     DOCTOR_REPLY_QUEUE: "doctorReplyQueue",
     ERROR_QUEUE: "errorQueue",
-    GET_DOCTORS_QUEUE: "getDoctorsQueue",
-    CHANGE_AVAILABILITY_QUEUE: "changeAvailabilityQueue"
+    APPOINTMENT_REPLY_QUEUE: "appointmentReplyQueue",
+    GET_APPOINTMENT_QUEUE: "getAppointmentsQueue",
+    CHANGE_AVAILABILITY_QUEUE:"changeAvailabilityQueue"
 }

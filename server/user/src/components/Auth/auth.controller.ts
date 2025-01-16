@@ -114,6 +114,13 @@ class AuthController {
         }
     }
 
+    /**
+     * This function is used to update the user profile.
+     * @param req 
+     * @param res 
+     * @returns 
+     */
+
     async updateUserProfile(req: Request, res: Response): Promise<IApiResponse | any> {
         try {
             const customReq = req as CustomRequest

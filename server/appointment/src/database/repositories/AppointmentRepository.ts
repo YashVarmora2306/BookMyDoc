@@ -1,0 +1,51 @@
+import { Repository } from "typeorm";
+import { Appointment } from "../entities/appointment";
+import AppDataSource from "../config/dbConfig";
+
+
+/**
+ * Appointment repository class to handle database operations related to Appointment.
+ */
+
+class AppointmentRepository {
+    private repository: Repository<Appointment>;
+
+    constructor() {
+        this.repository = AppDataSource.getRepository(Appointment)
+    }
+
+
+    /**
+     * Create and save an appointment to the database.
+     * @param appointment - The appointment entity to save.
+     * @returns The saved appointment entity.
+     */
+
+    public async createAppointment(appointment: Appointment): Promise<Appointment> {
+        return this.repository.save(appointment);
+    }
+
+    /**
+     * Find an appointment by id.
+     * @param id - Id of the appointment to find.
+     * @return The appointment entity if found, null otherwise.
+     */
+
+    public async findAppointmentById(id: string): Promise<Appointment | null> {
+        return this.repository.findOne({
+            where: { id },
+        });
+    }
+
+    /**
+     * Get all Appointments
+     * @returns An array of all Appointments.
+     */
+
+    public async getAllAppointments(): Promise<Appointment[] | null> {
+        return this.repository.find();
+    }
+
+}
+
+export default new AppointmentRepository()

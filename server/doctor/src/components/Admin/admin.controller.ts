@@ -1,6 +1,6 @@
 import { logger } from "../../utils/logger";
 import { IDoctorData, IDoctorPayload } from "./interface/doctor.interface";
-import doctorService from "./admin.service";
+import adminService from "./admin.service";
 import { GLOBAL_MESSAGE, RABBITMQ_QUEUE_NAME, SUCCESS_MESSAGE } from "../../constant/message";
 import rabbitMQ from "../../utils/rabbitMQ/rabbitMQ";
 
@@ -14,13 +14,13 @@ class AdminController {
         try {
 
             // Hash the password
-            const hashedPassword = await doctorService.convertPlainTextToHash(doctorPayload.password);
+            const hashedPassword = await adminService.convertPlainTextToHash(doctorPayload.password);
             const doctorData: IDoctorData = {
                 ...doctorPayload,
                 address: JSON.parse(doctorPayload.address),
                 password: hashedPassword
             }
-            const doctor = await doctorService.createDoctor(doctorData);
+            const doctor = await adminService.createDoctor(doctorData);
             logger.info(__filename, "registerDoctor", "", SUCCESS_MESSAGE.DOCTOR_ADDED, doctor)
 
             const reply = JSON.stringify(
@@ -72,7 +72,7 @@ class AdminController {
         try {
             await rabbitMQ.subscribeToQueue(RABBITMQ_QUEUE_NAME.GET_DOCTORS_QUEUE, async (message: string) => {
                 logger.info(__filename, "SubscribeToGetAllDoctors", "", "Processing get all doctors request.");
-                const doctors = await doctorService.getAllDoctors();
+                const doctors = await adminService.getAllDoctors();
                 const reply = JSON.stringify(
                     {
                         status: "success",
@@ -108,7 +108,7 @@ class AdminController {
         try {
             await rabbitMQ.subscribeToQueue(RABBITMQ_QUEUE_NAME.CHANGE_AVAILABILITY_QUEUE,
                 async (message: string) => {
-                    const doctor = await doctorService.changeAvailability(message);
+                    const doctor = await adminService.changeAvailability(message);
                     const reply = JSON.stringify(
                         {
                             status: "success",
