@@ -60,6 +60,15 @@ class UserRepository{
         await this.repository.update(id, data);
         return this.repository.findOneBy({ id });
     }
+
+    /**
+     * Get all users
+     * @returns An array of all users.
+     */
+
+    public async getAllUsers(): Promise<User[] | null> {
+        return this.repository.find();
+    }
 }
 
 export default new UserRepository()

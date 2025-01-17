@@ -2,6 +2,7 @@ import { Router } from "express";
 import AuthRouter from "./auth.routes";
 import DoctorRouter from "./doctor.routes";
 import AppointmentRouter from "./appointment.routes";
+import DashboardRouter from "./dashboard.routes";
 
 export default (app: Router) => {
     const apiRouter: Router = Router();
@@ -17,4 +18,5 @@ export default (app: Router) => {
     apiRouter.use("/auth", AuthRouter);
     apiRouter.use("/doctor", DoctorRouter);
     apiRouter.use("/appointment", AppointmentRouter);
+    apiRouter.use("/dashboard", DashboardRouter);
 }
