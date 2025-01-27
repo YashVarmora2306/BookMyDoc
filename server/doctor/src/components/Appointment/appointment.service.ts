@@ -28,16 +28,15 @@ class AppointmentService {
         }
 
     /**
-     * Get all Appointments by sending a request to the appointment service.
+     * Get doctor Appointments by sending a request to the appointment service.
      * @returns 
      */
 
-    async getAllAppointment(): Promise<IReplayFromAppointment>{
+    async getDoctorAppointments(doctorId: string): Promise<IReplayFromAppointment>{
         try {
-            const message = "Request to get all Appointments."
 
-            await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.GET_APPOINTMENT_QUEUE, message)
-            logger.info(__filename, "getAllAppointment", "", "Requested to get all Appointments.")
+            await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.GET_DOCTOR_APPOINTMENT_QUEUE, doctorId)
+            logger.info(__filename, "getDoctorAppointments", "", "Requested to get Doctor Appointments.")
             const reply = await this.getReplyFromAppointment()
 
             const appointments = {
@@ -48,7 +47,7 @@ class AppointmentService {
 
             return appointments
         } catch (error) {
-            logger.error(__filename, "getAllAppointment", "", "Error while getting all appointments: ", error)
+            logger.error(__filename, "getDoctorAppointments", "", "Error while getting appointments: ", error)
             throw error
         }
     }

@@ -33,6 +33,7 @@ export const RABBITMQ_QUEUE_NAME = {
     APPOINTMENT_REPLY_QUEUE: "appointmentReplyQueue",
     ERROR_QUEUE: "errorQueue",
     GET_APPOINTMENT_QUEUE: "getAppointmentsQueue",
+    GET_DOCTOR_APPOINTMENT_QUEUE: "getDoctorAppointmentsQueue",
     CHANGE_AVAILABILITY_QUEUE: "changeAvailabilityQueue",
     USER_REPLY_QUEUE: "userReplyQueue",
     GET_DOCTORS_QUEUE: "getDoctorsQueue",

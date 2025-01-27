@@ -71,6 +71,10 @@ class RabbitMQService {
         }
     }
 
+    /**
+     * Unsubscribes from the specified queue.
+     * @param consumerTag - The consumer tag to unsubscribe from the queue.
+     */
     async unsubscribeFromQueue(consumerTag: string) {
         try {
             if (this.channel) {
