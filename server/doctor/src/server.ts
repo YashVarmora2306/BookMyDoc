@@ -3,8 +3,7 @@ import "reflect-metadata";
 import app from "./app";
 import { logger } from "./utils/logger";
 import initializeDatabase from "./database/initialization/dbInitialization";
-import doctorController from "./components/Admin/admin.controller";
-import receiver from "./components/Admin";
+import masterReceiver from "./components/receiver"
 
 dotenv.config({ path: `${__dirname}/../.env` });
 
@@ -18,7 +17,7 @@ const PORT: number = Number(process.env.PORT) || 5002;
 
         await initializeDatabase();
         logger.info(__filename, "", "", "Connected to postgres database successfully", "");
-        await receiver();
+        await masterReceiver();
 
     } catch (error) {
         logger.error(__filename, "", "", `Failed to start the server: ${error}`, { error });

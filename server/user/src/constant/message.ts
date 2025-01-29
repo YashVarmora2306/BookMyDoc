@@ -14,7 +14,7 @@ export const ERROR_MESSAGE = {
     USER_NOT_FOUND: "User not found.",
     INVALID_CREDENTIALS: "Invalid credentials",
     IMAGE_NOT_FOUND: "Image not found.", EXISTING_EMAIL: "Email already exists.",
-    ID_NOT_FOUND:"Id not found"
+    ID_NOT_FOUND: "Id not found"
 }
 
 export const SUCCESS_MESSAGE = {
@@ -23,7 +23,8 @@ export const SUCCESS_MESSAGE = {
     USER_FOUND: "User Found successfully",
     USER_PROFILE: "User Found",
     USER_PROFILE_UPDATED: "User profile updated successfully",
-    SUCCESSFULLY_RETRIEVED_USERS: "Successfully retrieved users data"
+    SUCCESSFULLY_RETRIEVED_USERS: "Successfully retrieved users data",
+    APPOINTMENT_BOOKED: "Appointment booked successfully",
 }
 
 export const VALIDATION_MESSAGE = {
@@ -44,5 +45,8 @@ export const RABBITMQ_QUEUE_NAME = {
     CHANGE_AVAILABILITY_QUEUE: "changeAvailabilityQueue",
     USER_REPLY_QUEUE: "userReplyQueue",
     GET_DOCTORS_QUEUE: "getDoctorsQueue",
+    GET_DOCTOR_BY_ID_QUEUE: "getDoctorByIdQueue",
     GET_USERS_QUEUE: "getUsersQueue",
+    BOOK_APPOINTMENT_QUEUE: "bookAppointmentQueue",
+    UPDATE_DOCTOR_QUEUE: "updateDoctorQueue",
 }

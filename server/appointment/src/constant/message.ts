@@ -38,4 +38,5 @@ export const RABBITMQ_QUEUE_NAME = {
     USER_REPLY_QUEUE: "userReplyQueue",
     GET_DOCTORS_QUEUE: "getDoctorsQueue",
     GET_USERS_QUEUE: "getUsersQueue",
+    BOOK_APPOINTMENT_QUEUE: "bookAppointmentQueue",
 }

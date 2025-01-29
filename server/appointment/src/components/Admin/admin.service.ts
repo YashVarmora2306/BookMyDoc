@@ -4,6 +4,10 @@ import { logger } from "../../utils/logger";
 
 class AdminService{
 
+    /**
+     * Get all appointments
+     * @returns 
+     */
     async getAllAppointments() {
         try {
             const appointments = await AppointmentRepository.getAllAppointments();

@@ -12,7 +12,6 @@ class Logging {
 
     /**
      * creates an instance of Logging.
-     * Description: Creates an instance of Logging with daily rotate file.
      */
 
     public transport = new transports.DailyRotateFile({
