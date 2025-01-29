@@ -5,5 +5,6 @@ import appointmentController from "../components/Appointment/appointment.control
 const router: Router = Router();
 
 router.post("/book-appointment", authMiddleware, appointmentController.bookAppointment);
+router.get("/appointments", authMiddleware, appointmentController.listAppointments);
 
 export default router;

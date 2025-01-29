@@ -2,7 +2,7 @@ import { RABBITMQ_QUEUE_NAME } from "../../constant/message";
 import UserRepository from "../../database/repositories/UserRepository";
 import { logger } from "../../utils/logger";
 import rabbitMQ from "../../utils/rabbitMQ/rabbitMQ";
-import { IAppointment, IAppointmentData, IReplayFromService } from "./interface/appointment.interface";
+import { IAppointment, IAppointmentPayload, IAppointmentResponse, IReplayFromService } from "./interface/appointment.interface";
 
 
 class AppointmentService {
@@ -56,7 +56,7 @@ class AppointmentService {
      * @returns 
      */
 
-    async bookAppointment(appointmentData: IAppointmentData): Promise<IAppointment> {
+    async bookAppointment(appointmentData: IAppointmentPayload): Promise<IAppointment> {
         try {
             await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.GET_DOCTOR_BY_ID_QUEUE, appointmentData.doctorId)
             logger.info(__filename, "bookAppointment", "", "Requested to get doctor data.")
@@ -126,6 +126,28 @@ class AppointmentService {
         }
     }
 
+    /**
+     * List all appointments of a user.
+     * @param userId 
+     * @returns 
+     */
+    async listAppointments(userId: string): Promise<IAppointmentResponse> {
+        try {
+            await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.GET_APPOINTMENT_BY_USER_ID_QUEUE, userId)
+            logger.info(__filename, "listAppointments", "", "Requested to get appointments of user.")
+            const reply = await this.getReplyFromAppointment()
+            const appointments = {
+                status: reply.status,
+                message: reply.message,
+                data: JSON.parse(reply.data)
+            }
+            return appointments
+
+        } catch (error) {
+            logger.error(__filename, "listAppointments", "", "Error while getting appointments: ", error)
+            throw error
+        }
+    }
 }
 
 export default new AppointmentService()

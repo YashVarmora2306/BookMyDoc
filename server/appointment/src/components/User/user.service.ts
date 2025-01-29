@@ -6,6 +6,11 @@ import { IAppointmentData } from "./interface/user.interface";
 
 class UserService { 
 
+    /**
+     * Book an appointment
+     * @param appointmentData 
+     * @returns 
+     */
 
     async bookAppointment(appointmentData: IAppointmentData): Promise<Appointment>{
         try {
@@ -25,6 +30,22 @@ class UserService {
 
         } catch (error) {
             logger.error(__filename, "bookAppointment", "", 'Error occurred', error)
+            throw error
+        }
+    }
+
+    /**
+     * Get all appointments by userId
+     * @param userId 
+     * @returns 
+     */
+    async getAppointmentsByUserId(userId: string): Promise<Appointment[] | null> { 
+        try {
+            const appointments = await AppointmentRepository.getUserAppointments(userId);
+            
+            return appointments;
+        } catch (error) {
+            logger.error(__filename, "getAppointmentsByUserId", "", 'Error occurred', error)
             throw error
         }
     }

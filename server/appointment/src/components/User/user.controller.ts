@@ -8,6 +8,10 @@ import userService from "./user.service";
 
 class UserController{
 
+    /**
+     * Book an appointment
+     * @param appointmentData - appointment data
+     */
     async bookAppointment(appointmentData: IAppointmentData) {
         try {
             const Appointment = await userService.bookAppointment(appointmentData);
@@ -30,6 +34,9 @@ class UserController{
         }
     }
 
+    /**
+     * Subscribe to appointment queue
+     */
     async subscribeToAppointmentQueue() {
         try {
             await rabbitMQ.subscribeToQueue(RABBITMQ_QUEUE_NAME.BOOK_APPOINTMENT_QUEUE, async (message: string) => {
@@ -40,6 +47,34 @@ class UserController{
             })
         } catch (error) {
             logger.error(__filename, "subscribeToAppointmentQueue", "", "Error processing doctor registration request: ", error);
+        }
+    }
+
+    /**
+     * List appointments by userId
+     */
+    async listAppointmentsByUserId() { 
+
+        try {
+            await rabbitMQ.subscribeToQueue(RABBITMQ_QUEUE_NAME.GET_APPOINTMENT_BY_USER_ID_QUEUE, async (message: string) => { 
+                logger.info(__filename, "listAppointmentsByUserId", "", "Processing appointment request.");
+                const appointments = await userService.getAppointmentsByUserId(message);
+                const reply = JSON.stringify({
+                    status: "success",
+                    message: "Successfully retrieved appointments.",
+                    data: JSON.stringify(appointments)
+                })
+                await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.APPOINTMENT_REPLY_QUEUE, reply);
+                logger.info(__filename, "listAppointmentsByUserId", "", "Appointments successfully retrieved.")
+            })
+        } catch (error) {
+            const reply = JSON.stringify({
+                status: "error",
+                message: error,
+                data: null
+            })
+            await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.APPOINTMENT_REPLY_QUEUE, reply);
+            logger.error(__filename,"listAppointmentByUserId", "", "Error processing get appointment by userId.")
         }
     }
 }

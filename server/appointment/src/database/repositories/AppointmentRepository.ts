@@ -56,7 +56,18 @@ class AppointmentRepository {
         return this.repository.find({
             where: { doctorId },
         });
-        }
+    }
+
+    /**
+     * Get user appointments
+     * @param userId - The id of the user to get appointments for.
+     * @returns An array of all appointments for the user.
+     */
+    public async getUserAppointments(userId: string): Promise<Appointment[] | null> {
+        return this.repository.find({
+            where: { userId },
+        });
+    }
 
 }
 

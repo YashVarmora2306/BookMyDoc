@@ -6,6 +6,7 @@ import userController from "./user.controller";
 const receiver = async () => {
     try {
         await userController.subscribeToAppointmentQueue();
+        await userController.listAppointmentsByUserId(); 
     } catch (error) {
         logger.error(__filename, "Main", "", "Failed to initialize queue subscription:", error);
     }

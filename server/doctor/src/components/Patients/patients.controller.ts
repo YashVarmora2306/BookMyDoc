@@ -6,6 +6,9 @@ import patientsService from "./patients.service"
 
 class PatientsController {
 
+    /**
+     * Subscribe to get doctor queue
+     */
     async getDoctor() {
         try {
             await rabbitMQ.subscribeToQueue(RABBITMQ_QUEUE_NAME.GET_DOCTOR_BY_ID_QUEUE, async (message: string) => {
@@ -34,6 +37,9 @@ class PatientsController {
         }
     }
 
+    /**
+     * Subscribe to update doctor queue
+     */
     async updateDoctor() { 
         try {
             await rabbitMQ.subscribeToQueue(RABBITMQ_QUEUE_NAME.UPDATE_DOCTOR_QUEUE, async (message: string) => { 
