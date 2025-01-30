@@ -26,6 +26,7 @@ export const SUCCESS_MESSAGE = {
     SUCCESSFULLY_RETRIEVED_USERS: "Successfully retrieved users data",
     APPOINTMENT_BOOKED: "Appointment booked successfully",
     SUCCESSFULLY_RETRIEVED_APPOINTMENTS: "Successfully retrieved appointments",
+    SUCCESSFULLY_CANCELED_APPOINTMENT: "Successfully canceled appointment",
 }
 
 export const VALIDATION_MESSAGE = {
@@ -51,4 +52,6 @@ export const RABBITMQ_QUEUE_NAME = {
     BOOK_APPOINTMENT_QUEUE: "bookAppointmentQueue",
     UPDATE_DOCTOR_QUEUE: "updateDoctorQueue",
     GET_APPOINTMENT_BY_USER_ID_QUEUE: "getAppointmentByUserIdQueue",
+    GET_APPOINTMENT_BY_ID_QUEUE: "getAppointmentByIdQueue",
+    CANCEL_APPOINTMENT_QUEUE: "cancelAppointmentQueue",
 }

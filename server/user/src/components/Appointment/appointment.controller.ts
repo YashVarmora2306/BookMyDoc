@@ -57,8 +57,28 @@ class AppointmentController {
             
             return ResponseHandler.success(res, 200, SUCCESS_MESSAGE.SUCCESSFULLY_RETRIEVED_APPOINTMENTS, appointments)
         } catch (error) {
-            console.log(error);
             return ResponseHandler.error(res, 500, GLOBAL_MESSAGE.INTERNAL_SERVER_ERROR, error)
+        }
+    }
+
+    /**
+     * Cancel an appointment
+     * @param req
+     * @param res
+     * @returns
+     */
+
+    async cancelAppointment(req: Request, res: Response): Promise<IApiResponse | any>{
+        try {
+            const customReq = req as CustomRequest;
+            const userId = customReq.body.userId
+            const { appointmentId } = req.body;
+            await appointmentService.cancelAppointment(appointmentId, userId);
+            return ResponseHandler.success(res, 200, SUCCESS_MESSAGE.SUCCESSFULLY_CANCELED_APPOINTMENT)
+
+        } catch (error) {
+            const errorMessage = error instanceof Error ? error.message : 'Unknown error';
+            return ResponseHandler.error(res, 500, GLOBAL_MESSAGE.INTERNAL_SERVER_ERROR, errorMessage)
         }
     }
 }

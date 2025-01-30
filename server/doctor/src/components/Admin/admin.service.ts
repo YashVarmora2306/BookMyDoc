@@ -116,7 +116,8 @@ class AdminService {
             )
             return updatedDoctor;
         } catch (error) {
-
+            logger.error(__filename, 'changeAvailability', '', 'Error occurred', error);
+            throw error;
         }
     }
 }

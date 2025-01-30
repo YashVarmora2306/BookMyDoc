@@ -40,4 +40,6 @@ export const RABBITMQ_QUEUE_NAME = {
     GET_USERS_QUEUE: "getUsersQueue",
     BOOK_APPOINTMENT_QUEUE: "bookAppointmentQueue",
     GET_APPOINTMENT_BY_USER_ID_QUEUE: "getAppointmentByUserIdQueue",
+    GET_APPOINTMENT_BY_ID_QUEUE: "getAppointmentByIdQueue",
+    CANCEL_APPOINTMENT_QUEUE: "cancelAppointmentQueue",
 }

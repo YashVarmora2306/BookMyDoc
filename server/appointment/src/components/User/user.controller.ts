@@ -6,7 +6,7 @@ import { IAppointmentData } from "./interface/user.interface"
 import userService from "./user.service";
 
 
-class UserController{
+class UserController {
 
     /**
      * Book an appointment
@@ -53,10 +53,10 @@ class UserController{
     /**
      * List appointments by userId
      */
-    async listAppointmentsByUserId() { 
+    async listAppointmentsByUserId() {
 
         try {
-            await rabbitMQ.subscribeToQueue(RABBITMQ_QUEUE_NAME.GET_APPOINTMENT_BY_USER_ID_QUEUE, async (message: string) => { 
+            await rabbitMQ.subscribeToQueue(RABBITMQ_QUEUE_NAME.GET_APPOINTMENT_BY_USER_ID_QUEUE, async (message: string) => {
                 logger.info(__filename, "listAppointmentsByUserId", "", "Processing appointment request.");
                 const appointments = await userService.getAppointmentsByUserId(message);
                 const reply = JSON.stringify({
@@ -74,7 +74,53 @@ class UserController{
                 data: null
             })
             await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.APPOINTMENT_REPLY_QUEUE, reply);
-            logger.error(__filename,"listAppointmentByUserId", "", "Error processing get appointment by userId.")
+            logger.error(__filename, "listAppointmentByUserId", "", "Error processing get appointment by userId.")
+        }
+    }
+
+    /**
+     * Get appointment by AppointmentId
+     */
+    async getAppointmentById() {
+        try {
+            await rabbitMQ.subscribeToQueue(RABBITMQ_QUEUE_NAME.GET_APPOINTMENT_BY_ID_QUEUE, async (message: string) => {
+                logger.info(__filename, "getAppointmentById", "", "Processing appointment request.");
+                const appointment = await userService.getAppointmentById(message);
+                const reply = JSON.stringify({
+                    status: "success",
+                    message: "Successfully retrieved appointment.",
+                    data: JSON.stringify(appointment)
+                })
+                await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.APPOINTMENT_REPLY_QUEUE, reply
+                );
+                logger.info(__filename, "getAppointmentById", "", "Appointment successfully retrieved.")
+            })
+        } catch (error) {
+            const reply = JSON.stringify({
+                status: "error",
+                message: error,
+                data: null
+            })
+            await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.APPOINTMENT_REPLY_QUEUE, reply
+            );
+            logger.error(__filename, "getAppointmentById", "", "Error processing get appointment by id.")
+        }
+    }
+
+    /**
+     * Cancel appointment.
+     */
+    async cancelAppointment() {
+        try {
+            await rabbitMQ.subscribeToQueue(RABBITMQ_QUEUE_NAME.CANCEL_APPOINTMENT_QUEUE,
+                async (message: string) => {
+                    logger.info(__filename, "cancelAppointment", "", "Processing cancel appointment request.");
+                    const appointment = await userService.cancelAppointment(message);
+                }
+            );
+            logger.info(__filename, "cancelAppointment", "", "Appointment successfully cancelled.")
+        } catch (error) {
+            logger.error(__filename, "cancelAppointment", "", "Error processing cancel appointment.")
         }
     }
 }

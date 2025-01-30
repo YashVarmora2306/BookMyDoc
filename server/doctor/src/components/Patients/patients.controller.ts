@@ -45,6 +45,7 @@ class PatientsController {
             await rabbitMQ.subscribeToQueue(RABBITMQ_QUEUE_NAME.UPDATE_DOCTOR_QUEUE, async (message: string) => { 
                 const doctor = await patientsService.updateDoctor(JSON.parse(message))
                 logger.info(__filename, "SubscribeToUpdateDoctor", "", "Update doctor request processed", doctor)
+                
             })
         } catch (error) {
             logger.error(__filename, "SubscribeToUpdateDoctor", "", "Error processing update doctor", error)

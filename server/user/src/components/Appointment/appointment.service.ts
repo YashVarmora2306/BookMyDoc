@@ -148,6 +148,54 @@ class AppointmentService {
             throw error
         }
     }
+
+    /**
+     * Cancel appointment
+     * @param appointmentId
+     * @param userId
+     * @returns
+     */
+
+    async cancelAppointment(appointmentId: string, userId: string): Promise<void> {
+        try {
+            await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.GET_APPOINTMENT_BY_ID_QUEUE, appointmentId)
+            logger.info(__filename, "cancelAppointment", "", "Requested to get appointment by appointmentId.")
+            const appointmentReply = await this.getReplyFromAppointment()
+            const appointment = {
+                status: appointmentReply.status,
+                message: appointmentReply.message,
+                data: JSON.parse(appointmentReply.data)
+            }
+            if (appointment.data.userId !== userId) {
+                throw new Error("Unauthorized action")
+            }
+            await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.CANCEL_APPOINTMENT_QUEUE, appointmentId)
+            logger.info(__filename, "cancelAppointment", "", "Appointment cancelled successfully.")
+
+            //  Updating doctor slot
+            const { doctorId, slotDate, slotTime } = appointment.data
+            await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.GET_DOCTOR_BY_ID_QUEUE, doctorId)
+            logger.info(__filename, "cancelAppointment", "", "Requested to get doctor by doctorID.")
+            const doctorReply = await this.getReplyFromDoctor()
+            const doctor = {
+                status: doctorReply.status,
+                message: doctorReply.message,
+                data: JSON.parse(doctorReply.data)
+            }
+            doctor.data.slots_booked[slotDate] = doctor.data.slots_booked[slotDate].filter(
+                (slot:string)=> slot !== slotTime.substring(0,5)
+            )
+            const message = JSON.stringify(
+                doctor.data
+            )
+            await rabbitMQ.publishToQueue(RABBITMQ_QUEUE_NAME.UPDATE_DOCTOR_QUEUE, message)
+            logger.info(__filename, "cancelAppointment", "", "Doctor slot updated successfully.")
+
+        } catch (error) {
+            logger.error(__filename, "cancelAppointment", "", "Error while canceling appointment.")
+            throw error
+        }
+    }
 }
 
 export default new AppointmentService()

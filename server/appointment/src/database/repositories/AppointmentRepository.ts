@@ -69,6 +69,17 @@ class AppointmentRepository {
         });
     }
 
+    /**
+     * Find an appointment by id and update
+     * @param appointmentId - The id of the appointment to find.
+     * @param data - Updated appointment data.
+     * @returns The appointment entity.
+     */
+    public async updateAppointment(appointmentId: string, data: Partial<Appointment>): Promise<Appointment | null> {
+        await this.repository.update(appointmentId, data);
+        return this.findAppointmentById(appointmentId)
+    }
+
 }
 
 export default new AppointmentRepository()

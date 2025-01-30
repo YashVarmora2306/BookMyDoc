@@ -4,7 +4,7 @@ import { logger } from "../../utils/logger";
 import { IAppointmentData } from "./interface/user.interface";
 
 
-class UserService { 
+class UserService {
 
     /**
      * Book an appointment
@@ -12,7 +12,7 @@ class UserService {
      * @returns 
      */
 
-    async bookAppointment(appointmentData: IAppointmentData): Promise<Appointment>{
+    async bookAppointment(appointmentData: IAppointmentData): Promise<Appointment> {
         try {
             // create a new appointment
             const AppointmentData = new Appointment
@@ -39,13 +39,47 @@ class UserService {
      * @param userId 
      * @returns 
      */
-    async getAppointmentsByUserId(userId: string): Promise<Appointment[] | null> { 
+    async getAppointmentsByUserId(userId: string): Promise<Appointment[] | null> {
         try {
             const appointments = await AppointmentRepository.getUserAppointments(userId);
-            
+
             return appointments;
         } catch (error) {
             logger.error(__filename, "getAppointmentsByUserId", "", 'Error occurred', error)
+            throw error
+        }
+    }
+
+    /**
+     * Get appointment by appointmentId
+     * @param appointmentId
+     * @returns
+     */
+    async getAppointmentById(appointmentId: string): Promise<Appointment | null> {
+        try {
+            const appointment = await AppointmentRepository.findAppointmentById(appointmentId);
+            return appointment;
+        } catch (error) {
+            logger.error(__filename, "getAppointmentById", "", 'Error occurred', error)
+            throw error
+        }
+    }
+
+    /**
+     * Cancel appointment
+     * @param appointmentId
+     * @returns
+     */
+    async cancelAppointment(appointmentId: string): Promise<Appointment | null> {
+        try {
+            const appointment = await AppointmentRepository.findAppointmentById(appointmentId);
+            const updateAppointment = await AppointmentRepository.updateAppointment(appointmentId, {
+                ...appointment,
+                cancelled: true
+            });
+            return updateAppointment;
+        } catch (error) {
+            logger.error(__filename, "cancelAppointment", "", 'Error occurred', error)
             throw error
         }
     }
